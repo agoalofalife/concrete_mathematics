@@ -3,57 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <title>Flavius</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/2.7.14/cytoscape.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.18.1/vis.min.js"></script>
 </head>
+<style>
+    #app {
+        width: 900px;
+        height: 600px;
+    }
+</style>
 <body>
 <div id="app">
 
 
-    <div id="a"></div>
-    <div id="b"></div>
-    <div id="ab"></div>
+</div>
+<div class="form-group col-md-4" id="input">
+    <label>Введите количество войнов</label>
+    <input type="text" class="form-control " id="InputName" placeholder="Например 10">
 </div>
 <script>
-    var cy = cytoscape({
-        container: document.getElementById('app'), // container to render in
-        elements: [ // list of graph elements to start with
-            { // node a
-                data: { id: 'a' }
-            },
-            { // node b
-                data: { id: 'b' }
-            },
-            { // edge ab
-                data: { id: 'ab', source: 'a', target: 'b' }
-            }
-        ],
+    document.addEventListener("DOMContentLoaded", function() {
 
-        style: [ // the stylesheet for the graph
-            {
-                selector: 'node',
-                style: {
-                    'background-color': '#666',
-                    'label': 'data(id)'
+
+        document.querySelector('#InputName').addEventListener('keypress', function (e) {
+            if (e.which == 13 || e.keyCode == 13) {
+
+                   var count     = ++e.target.value + 1;
+                   var box       = [];
+                   var edges_box = [];
+
+                for (i = 1; i < count; i++) {
+                    box.push({
+                        id    : i,
+                        label : i
+                    });
+
+                    if (i == count - 1){
+                        edges_box.push({
+                            from: i, to: 1
+                        })
+                    } else{
+                        edges_box.push({
+                            from: i, to: i + 1
+                        })
+                    }
                 }
-            },
 
-            {
-                selector: 'edge',
-                style: {
-                    'width': 3,
-                    'line-color': '#ccc',
-                    'target-arrow-color': '#ccc',
-                    'target-arrow-shape': 'triangle'
-                }
+                nodes.add(box);
+                edges.add(edges_box);
+//                document.querySelector('#input').style.display = 'none';
             }
-        ],
 
-        layout: {
-            name: 'grid',
-            rows: 1
-        }
+        });
+
     });
-    console.log( cy );
+
+    var edges     = new vis.DataSet();
+    var nodes     = new vis.DataSet();
+    var container = document.getElementById('app');
+
+    var data = {
+        nodes: nodes,
+        edges:edges
+    };
+
+    var options = {
+
+        height: '100%',
+        width: '100%',
+        locale : 'ru',
+        nodes : {
+            borderWidth : 3,
+            image : 'https://im2-tub-ru.yandex.net/i?id=d737d06619263323c46c9bab7c770366&n=33&h=192&w=192',
+            level : 8,
+            color : {
+                background : '#fff'
+            },
+//            physics : false
+        }
+    };
+
+    // initialize your network!
+    var network = new vis.Network(container, data, options);
 </script>
 </body>
 </html>
