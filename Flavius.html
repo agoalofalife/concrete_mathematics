@@ -16,76 +16,138 @@
 <body>
 <div id="app">
 
+    <svg width="580" height="400" xmlns="http://www.w3.org/2000/svg">
+        <!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
+        <g>
+            <title>background</title>
+            <rect fill="#fff" id="canvas_background" height="402" width="582" y="-1" x="-1"/>
+            <g display="none" overflow="visible" y="0" x="0" height="100%" width="100%" id="canvasGrid">
+                <rect fill="url(#gridpattern)" stroke-width="0" y="0" x="0" height="100%" width="100%"/>
+            </g>
+        </g>
+        <g class="body_svg">
+            <title>Layer 1</title>
+            <!--document.querySelector('.body_svg').innerHTML = '<ellipse ry="107" rx="107" id="svg_1" cy="150" cx="100" stroke-width="1.5" stroke="#000" fill="#fff"></ellipse>'-->
+            <ellipse ry="107" rx="107" id="svg_1" cy="200" cx="200" stroke-width="1.5" stroke="#000" fill="#fff"/>
 
+            <ellipse ry="22" rx="21.5" id="svg_2" cy="60"  cx="200" stroke-width="1.5" stroke="#000" fill="#fff"/>
+            <!--<ellipse ry="22" rx="21.5" id="svg_3" cy="75"  cx="260" stroke-width="1.5" stroke="#000" fill="#fff"/>-->
+            <!--<ellipse ry="22" rx="21.5" id="svg_4" cy="115" cx="310" stroke-width="1.5" stroke="#000" fill="#fff"/>-->
+            <!--<ellipse ry="22" rx="21.5" id="svg_5" cy="175" cx="335" stroke-width="1.5" stroke="#000" fill="#fff"/>-->
+            <!--<ellipse ry="22" rx="21.5" id="svg_5" cy="240" cx="330" stroke-width="1.5" stroke="#000" fill="#fff"/>-->
+        </g>
+    </svg>
 </div>
-<div class="form-group col-md-4" id="input">
-    <label>Введите количество войнов</label>
-    <input type="text" class="form-control " id="InputName" placeholder="Например 10">
-</div>
+<!--<div class="form-group col-md-4" id="input">-->
+    <!--<label>Введите количество войнов</label>-->
+    <!--<input type="text" class="form-control " id="InputName" placeholder="Например 10">-->
+<!--</div>-->
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    var count   = 10;
+    var centerX = 200;
+    var centerY = 200;
+    var R       = 107;
+
+    var  clone = document.querySelector('#svg_1').cloneNode(false);
+    clone.cx.baseVal.value = '220';
+    clone.cy.baseVal.value = '150';
+    clone.rx.baseVal.value = '22';
+    clone.ry.baseVal.value = '22';
+    document.querySelector('.body_svg').appendChild(clone);
+
+    //    var x     = Math.cos(2 * Math.PI * i / count) * R + centerX;
+//    var y     = Math.sin(2 * Math.PI * i / count) * R + centerY;
+
+    var ellipse                   = document.createElement("ellipse");
+        ellipse.style.strokeWidth = '1.5';
+        ellipse.style.stroke      = '#000';
+        ellipse.style.fill        = '#fff"';
+//        ellipse.setAttribute("stroke-width", "1.5");
+//        ellipse.setAttribute("stroke", "#000");
+//        ellipse.setAttribute("fill", "#fff");
+
+        ellipse.setAttribute("ry", "107");
+        ellipse.setAttribute("rx", "107");
+
+    for (var i = 0; i < count; i++){
 
 
-        document.querySelector('#InputName').addEventListener('keypress', function (e) {
-            if (e.which == 13 || e.keyCode == 13) {
 
-                   var count     = ++e.target.value + 1;
-                   var box       = [];
-                   var edges_box = [];
+        var x     = Math.cos(2 * Math.PI * i / count) * R + centerX;
+        var y     = Math.sin(2 * Math.PI * i / count) * R + centerY;
 
-                for (i = 1; i < count; i++) {
-                    box.push({
-                        id    : i,
-                        label : i
-                    });
+        ellipse.setAttribute("cy", y);
+        ellipse.setAttribute("cx", x);
+//        document.querySelector('.body_svg').appendChild(ellipse);
+//        console.log( Math.cos(2 * Math.PI * i / count) * R + centerX , 'X');
+//        console.log( Math.sin(2 * Math.PI * i / count) * R + centerY , 'Y');
+    }
 
-                    if (i == count - 1){
-                        edges_box.push({
-                            from: i, to: 1
-                        })
-                    } else{
-                        edges_box.push({
-                            from: i, to: i + 1
-                        })
-                    }
-                }
-
-                nodes.add(box);
-                edges.add(edges_box);
-//                document.querySelector('#input').style.display = 'none';
-            }
-
-        });
-
-    });
-
-    var edges     = new vis.DataSet();
-    var nodes     = new vis.DataSet();
-    var container = document.getElementById('app');
-
-    var data = {
-        nodes: nodes,
-        edges:edges
-    };
-
-    var options = {
-
-        height: '100%',
-        width: '100%',
-        locale : 'ru',
-        nodes : {
-            borderWidth : 3,
-            image : 'https://im2-tub-ru.yandex.net/i?id=d737d06619263323c46c9bab7c770366&n=33&h=192&w=192',
-            level : 8,
-            color : {
-                background : '#fff'
-            },
-//            physics : false
-        }
-    };
-
-    // initialize your network!
-    var network = new vis.Network(container, data, options);
+//var max_down = 330;
+//var max_up   = 60;
+//    document.addEventListener("DOMContentLoaded", function() {
+//
+//
+//        document.querySelector('#InputName').addEventListener('keypress', function (e) {
+//            if (e.which == 13 || e.keyCode == 13) {
+//
+//                   var count     = ++e.target.value + 1;
+//                   var box       = [];
+//                   var edges_box = [];
+//
+//                for (i = 1; i < count; i++) {
+//                    box.push({
+//                        id    : i,
+//                        label : i
+//                    });
+//
+//                    if (i == count - 1){
+//                        edges_box.push({
+//                            from: i, to: 1
+//                        })
+//                    } else{
+//                        edges_box.push({
+//                            from: i, to: i + 1
+//                        })
+//                    }
+//                }
+//
+//                nodes.add(box);
+//                edges.add(edges_box);
+////                document.querySelector('#input').style.display = 'none';
+//            }
+//
+//        });
+//
+//    });
+//
+//    var edges     = new vis.DataSet();
+//    var nodes     = new vis.DataSet();
+//    var container = document.getElementById('app');
+//
+//    var data = {
+//        nodes: nodes,
+//        edges:edges
+//    };
+//
+//    var options = {
+//
+//        height: '100%',
+//        width: '100%',
+//        locale : 'ru',
+//        nodes : {
+//            borderWidth : 3,
+//            image : 'https://im2-tub-ru.yandex.net/i?id=d737d06619263323c46c9bab7c770366&n=33&h=192&w=192',
+//            level : 8,
+//            color : {
+//                background : '#fff'
+//            },
+////            physics : false
+//        }
+//    };
+//
+//    // initialize your network!
+//    var network = new vis.Network(container, data, options);
 </script>
 </body>
 </html>
