@@ -27,15 +27,16 @@
         </g>
         <g class="body_svg">
             <title>Layer 1</title>
+            <!--<text stroke="#000" transform="matrix(3.0356450076790225,0,0,1.3570212375664852,-199.55695648982407,-42.47836624287295) " xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="24" id="svg_1" y="137" x="97.5" stroke-width="0" fill="#000000">1</text>-->
             <!--document.querySelector('.body_svg').innerHTML = '<ellipse ry="107" rx="107" id="svg_1" cy="150" cx="100" stroke-width="1.5" stroke="#000" fill="#fff"></ellipse>'-->
             <ellipse ry="107" rx="107" id="svg_1" cy="200" cx="200" stroke-width="1.5" stroke="#000" fill="#fff"/>
+            <!--<text xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="24" id="svg_text" y="145" x="280" stroke-width="0" stroke="#000" fill="#000000"></text>-->
 
-            <ellipse ry="22" rx="21.5" id="svg_2" cy="60"  cx="200" stroke-width="1.5" stroke="#000" fill="#fff"/>
-            <!--<ellipse ry="22" rx="21.5" id="svg_3" cy="75"  cx="260" stroke-width="1.5" stroke="#000" fill="#fff"/>-->
-            <!--<ellipse ry="22" rx="21.5" id="svg_4" cy="115" cx="310" stroke-width="1.5" stroke="#000" fill="#fff"/>-->
-            <!--<ellipse ry="22" rx="21.5" id="svg_5" cy="175" cx="335" stroke-width="1.5" stroke="#000" fill="#fff"/>-->
-            <!--<ellipse ry="22" rx="21.5" id="svg_5" cy="240" cx="330" stroke-width="1.5" stroke="#000" fill="#fff"/>-->
         </g>
+        <!--<g id="item" style="display: none">-->
+            <!--<ellipse stroke="#000" ry="20.000001" rx="21.5" id="svg_3" cy="160.000001" cx="177" stroke-width="1.5" fill="#fff"/>-->
+            <!--<text xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="24" id="svg_4" y="169" x="169.5" fill-opacity="null" stroke-opacity="null" stroke-width="0" stroke="#000" fill="#000000">1</text>-->
+        <!--</g>-->
     </svg>
 </div>
 <!--<div class="form-group col-md-4" id="input">-->
@@ -48,36 +49,36 @@
     var centerY = 200;
     var R       = 107;
 
-    var  clone = document.querySelector('#svg_1').cloneNode(false);
-    clone.cx.baseVal.value = '220';
-    clone.cy.baseVal.value = '150';
-    clone.rx.baseVal.value = '22';
-    clone.ry.baseVal.value = '22';
-    document.querySelector('.body_svg').appendChild(clone);
 
-    //    var x     = Math.cos(2 * Math.PI * i / count) * R + centerX;
-//    var y     = Math.sin(2 * Math.PI * i / count) * R + centerY;
 
-    var ellipse                   = document.createElement("ellipse");
-        ellipse.style.strokeWidth = '1.5';
-        ellipse.style.stroke      = '#000';
-        ellipse.style.fill        = '#fff"';
-//        ellipse.setAttribute("stroke-width", "1.5");
-//        ellipse.setAttribute("stroke", "#000");
-//        ellipse.setAttribute("fill", "#fff");
+    var string = ` <ellipse stroke="#000" ry="20.000001" rx="21.5" id="svg_3" cy="160.000001" cx="177" stroke-width="1.5" fill="#fff"/>
+            <text xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="24" id="svg_4" y="169" x="169.5" fill-opacity="null" stroke-opacity="null" stroke-width="0" stroke="#000" fill="#000000">1</text>`;
 
-        ellipse.setAttribute("ry", "107");
-        ellipse.setAttribute("rx", "107");
 
     for (var i = 0; i < count; i++){
-
-
+        var g           = document.createElementNS("http://www.w3.org/2000/svg", 'g');
+        g.innerHTML = string;
 
         var x     = Math.cos(2 * Math.PI * i / count) * R + centerX;
         var y     = Math.sin(2 * Math.PI * i / count) * R + centerY;
 
-        ellipse.setAttribute("cy", y);
-        ellipse.setAttribute("cx", x);
+//        var  clone     = document.querySelector('#item').cloneNode(false);
+//        var  cloneText = document.querySelector('#svg_text').cloneNode(false);
+//        console.log( clone );
+        console.dir(  g.children[1]);
+        g.children[0].cx.baseVal.value = x ;
+        g.children[0].cy.baseVal.value = y ;
+        g.children[0].rx.baseVal.value = '22';
+        g.children[0].ry.baseVal.value = '22';
+
+        g.children[1].innerHTML = i + 1;
+        g.children[1].x.baseVal[0].value = x - 10;
+        g.children[1].y.baseVal[0].value = y + 6;
+//        clone.appendChild(cloneText);
+//        document.querySelector('.body_svg').appendChild(g);
+        document.querySelector('.body_svg').appendChild(g);
+//        ellipse.setAttribute("cy", y);
+//        ellipse.setAttribute("cx", x);
 //        document.querySelector('.body_svg').appendChild(ellipse);
 //        console.log( Math.cos(2 * Math.PI * i / count) * R + centerX , 'X');
 //        console.log( Math.sin(2 * Math.PI * i / count) * R + centerY , 'Y');
