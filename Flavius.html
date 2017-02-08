@@ -3,21 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Flavius</title>
-    <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.18.1/vis.min.js"></script>
 </head>
 <style>
-    #app {
-        width: 900px;
-        height: 600px;
-    }
+
 </style>
 <body>
 <div id="app">
 
     <svg width="580" height="400" xmlns="http://www.w3.org/2000/svg">
-        <!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
         <g>
             <title>background</title>
             <rect fill="#fff" id="canvas_background" height="402" width="582" y="-1" x="-1"/>
@@ -27,128 +22,86 @@
         </g>
         <g class="body_svg">
             <title>Layer 1</title>
-            <!--<text stroke="#000" transform="matrix(3.0356450076790225,0,0,1.3570212375664852,-199.55695648982407,-42.47836624287295) " xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="24" id="svg_1" y="137" x="97.5" stroke-width="0" fill="#000000">1</text>-->
-            <!--document.querySelector('.body_svg').innerHTML = '<ellipse ry="107" rx="107" id="svg_1" cy="150" cx="100" stroke-width="1.5" stroke="#000" fill="#fff"></ellipse>'-->
             <ellipse ry="107" rx="107" id="svg_1" cy="200" cx="200" stroke-width="1.5" stroke="#000" fill="#fff"/>
-            <!--<text xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="24" id="svg_text" y="145" x="280" stroke-width="0" stroke="#000" fill="#000000"></text>-->
-
         </g>
-        <!--<g id="item" style="display: none">-->
-            <!--<ellipse stroke="#000" ry="20.000001" rx="21.5" id="svg_3" cy="160.000001" cx="177" stroke-width="1.5" fill="#fff"/>-->
-            <!--<text xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="24" id="svg_4" y="169" x="169.5" fill-opacity="null" stroke-opacity="null" stroke-width="0" stroke="#000" fill="#000000">1</text>-->
-        <!--</g>-->
     </svg>
 </div>
-<!--<div class="form-group col-md-4" id="input">-->
-    <!--<label>Введите количество войнов</label>-->
-    <!--<input type="text" class="form-control " id="InputName" placeholder="Например 10">-->
-<!--</div>-->
+<div class="form-group col-md-4" id="input">
+    <label>Введите количество войнов</label>
+    <input type="text" class="form-control " id="InputName" placeholder="Например 10">
+</div>
 <script>
-    var count   = 10;
-    var centerX = 200;
-    var centerY = 200;
-    var R       = 107;
+    var centerX        = 200;
+    var centerY        = 200;
+    var R              = 107;
+
+    document.querySelector('#InputName').addEventListener('keypress', function (e) {
+        if (e.which == 13 || e.keyCode == 13) {
+
+            management.data.countElement = e.target.value;
+//            management.unebleInput();
+
+//            var generator = management.setElement();
+            // Добавить таймер для анимационного обавления элементов
+            console.log( management.setElement() );
+        }
+    });
 
 
-
-    var string = ` <ellipse stroke="#000" ry="20.000001" rx="21.5" id="svg_3" cy="160.000001" cx="177" stroke-width="1.5" fill="#fff"/>
-            <text xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="24" id="svg_4" y="169" x="169.5" fill-opacity="null" stroke-opacity="null" stroke-width="0" stroke="#000" fill="#000000">1</text>`;
-
-
-    for (var i = 0; i < count; i++){
-        var g           = document.createElementNS("http://www.w3.org/2000/svg", 'g');
-        g.innerHTML = string;
-
-        var x     = Math.cos(2 * Math.PI * i / count) * R + centerX;
-        var y     = Math.sin(2 * Math.PI * i / count) * R + centerY;
-
-//        var  clone     = document.querySelector('#item').cloneNode(false);
-//        var  cloneText = document.querySelector('#svg_text').cloneNode(false);
-//        console.log( clone );
-        console.dir(  g.children[1]);
-        g.children[0].cx.baseVal.value = x ;
-        g.children[0].cy.baseVal.value = y ;
-        g.children[0].rx.baseVal.value = '22';
-        g.children[0].ry.baseVal.value = '22';
-
-        g.children[1].innerHTML = i + 1;
-        g.children[1].x.baseVal[0].value = x - 10;
-        g.children[1].y.baseVal[0].value = y + 6;
-//        clone.appendChild(cloneText);
+//    for (var i = 0; i < count; i++){
+//        var g           = document.createElementNS("http://www.w3.org/2000/svg", 'g');
+//        g.innerHTML     = management.data.templateCircle;
+//
+//        var x           = Math.cos(2 * Math.PI * i / count) * R + centerX;
+//        var y           = Math.sin(2 * Math.PI * i / count) * R + centerY;
+//
+//        g.children[0].cx.baseVal.value = x ;
+//        g.children[0].cy.baseVal.value = y ;
+//        g.children[0].rx.baseVal.value = '22';
+//        g.children[0].ry.baseVal.value = '22';
+//
+//        g.children[1].innerHTML          = i + 1;
+//        g.children[1].x.baseVal[0].value = x - 10;
+//        g.children[1].y.baseVal[0].value = y + 6;
+//
 //        document.querySelector('.body_svg').appendChild(g);
-        document.querySelector('.body_svg').appendChild(g);
-//        ellipse.setAttribute("cy", y);
-//        ellipse.setAttribute("cx", x);
-//        document.querySelector('.body_svg').appendChild(ellipse);
-//        console.log( Math.cos(2 * Math.PI * i / count) * R + centerX , 'X');
-//        console.log( Math.sin(2 * Math.PI * i / count) * R + centerY , 'Y');
-    }
+//    }
 
-//var max_down = 330;
-//var max_up   = 60;
-//    document.addEventListener("DOMContentLoaded", function() {
-//
-//
-//        document.querySelector('#InputName').addEventListener('keypress', function (e) {
-//            if (e.which == 13 || e.keyCode == 13) {
-//
-//                   var count     = ++e.target.value + 1;
-//                   var box       = [];
-//                   var edges_box = [];
-//
-//                for (i = 1; i < count; i++) {
-//                    box.push({
-//                        id    : i,
-//                        label : i
-//                    });
-//
-//                    if (i == count - 1){
-//                        edges_box.push({
-//                            from: i, to: 1
-//                        })
-//                    } else{
-//                        edges_box.push({
-//                            from: i, to: i + 1
-//                        })
-//                    }
-//                }
-//
-//                nodes.add(box);
-//                edges.add(edges_box);
-////                document.querySelector('#input').style.display = 'none';
-//            }
-//
-//        });
-//
-//    });
-//
-//    var edges     = new vis.DataSet();
-//    var nodes     = new vis.DataSet();
-//    var container = document.getElementById('app');
-//
-//    var data = {
-//        nodes: nodes,
-//        edges:edges
-//    };
-//
-//    var options = {
-//
-//        height: '100%',
-//        width: '100%',
-//        locale : 'ru',
-//        nodes : {
-//            borderWidth : 3,
-//            image : 'https://im2-tub-ru.yandex.net/i?id=d737d06619263323c46c9bab7c770366&n=33&h=192&w=192',
-//            level : 8,
-//            color : {
-//                background : '#fff'
-//            },
-////            physics : false
-//        }
-//    };
-//
-//    // initialize your network!
-//    var network = new vis.Network(container, data, options);
+
+    var management = {
+        data : {
+          countElement   : '',
+          templateCircle :  `<ellipse stroke="#000" ry="20.000001" rx="21.5" id="svg_3" cy="160.000001" cx="177" stroke-width="1.5" fill="#fff"/>
+            <text xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="24" id="svg_4" y="169" x="169.5" fill-opacity="null" stroke-opacity="null" stroke-width="0" stroke="#000" fill="#000000">1</text>`,
+        },
+        unebleInput : function () {
+            document.querySelector('#input').style.display = 'none';
+        },
+        setElement : function* () {
+            var count = management.data.countElement;
+            for (var i = 0; i < count; i++){
+
+                var g           = document.createElementNS("http://www.w3.org/2000/svg", 'g');
+                g.innerHTML     = management.data.templateCircle;
+
+                var x           = Math.cos(2 * Math.PI * i / count) * R + centerX;
+                var y           = Math.sin(2 * Math.PI * i / count) * R + centerY;
+
+                g.children[0].cx.baseVal.value = x ;
+                g.children[0].cy.baseVal.value = y ;
+                g.children[0].rx.baseVal.value = '22';
+                g.children[0].ry.baseVal.value = '22';
+
+                g.children[1].innerHTML          = i + 1;
+                g.children[1].x.baseVal[0].value = x - 10;
+                g.children[1].y.baseVal[0].value = y + 6;
+
+                document.querySelector('.body_svg').appendChild(g);
+                yield i;
+            }
+            return true;
+        }
+    }
 </script>
 </body>
 </html>
