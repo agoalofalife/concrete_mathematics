@@ -22,6 +22,12 @@
       left: 1%;
       font-weight: 600;
   }
+    #arrow-right{
+        position: absolute;
+        top:45%;
+        left:3%;
+        display: none;
+    }
 </style>
 <body>
 <div id="app">
@@ -36,7 +42,7 @@
         </g>
         <g class="body_svg">
             <title>Layer 1</title>
-            <ellipse ry="200" rx="200" id="svg_1" cy="300" cx="300" stroke-width="1.5" stroke="#000" fill="#fff"/>
+            <ellipse ry="200" rx="200"  cy="300" cx="300" stroke-width="1.5" stroke="#000" fill="#fff"/>
         </g>
     </svg>
 </div>
@@ -45,11 +51,21 @@
     <input type="text" class="form-control " id="InputName" placeholder="Например 10">
 </div>
 <p id="message"></p>
+
+<div id="arrow-right">
+    <img src="https://openclipart.org/image/2400px/svg_to_png/197173/mono-goto.png" width="100" alt="">
+</div>
 <script>
     var centerX        = 300;
     var centerY        = 300;
     var R              = 200;
 
+    document.querySelector('#arrow-right').addEventListener('click', function (e) {
+
+        document.querySelector('#svg_' + management.linkGeneratorProcess.next().value[0]).style.display = 'none';
+
+//        console.log(management.data.linkGeneratorProcess);
+    });
     document.querySelector('#InputName').addEventListener('keypress', function (e) {
         if (e.which == 13 || e.keyCode == 13) {
 
@@ -58,19 +74,26 @@
             if ( management.checkCount() ) {
                 // Добавить таймер для анимационного обнавления элементов
                 var generator  = management.setElement();
+                management.unubleInput();
+                management.enableAllow();
                 var IDInterval = setInterval(function () {
                     if (generator.next().done === true){
                         clearInterval(IDInterval);
                     }
-                }, 120)
+                }, 120);
+                management.linkGeneratorProcess = get_last_hero(management.range(management.data.countElement), 2)
+
             } else {
                 management.pushMessage();
             }
-
         }
     });
 
-    function get_last_hero(box_fighters, step){
+
+
+
+
+    function*  get_last_hero(box_fighters, step){
 
         // Если у нас остался один воин мы возвращаем его номер
         if(box_fighters.length == 1){
@@ -84,20 +107,23 @@
         }
 
         // "убиваем война" след по счету путем извлечения и сокращения массива на 1
-        box_fighters.splice(step - 1,1);
+        yield box_fighters.splice(step - 1, 1);
 
-        // след шаг
-        return get_last_hero(box_fighters,step + 1);
+        yield* get_last_hero(box_fighters,step + 1);
     }
 
     var management = {
         data : {
-          countElement   : '',
+          countElement        : '',
+          linkGeneratorProcess : '',
           templateCircle :  `<ellipse stroke="#000" ry="20" rx="20" id="svg_3" cy="160" cx="177" stroke-width="1.5" fill="#fff"/>
-            <text xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="20" id="svg_4" y="169" x="169.5" fill-opacity="null" stroke-opacity="null" stroke-width="0" stroke="#000" fill="#000000">1</text>`,
+            <text xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="20"  y="169" x="169.5" fill-opacity="null" stroke-opacity="null" stroke-width="0" stroke="#000" fill="#000000">1</text>`,
         },
-        unebleInput : function () {
+        unubleInput : function () {
             document.querySelector('#input').style.display = 'none';
+        },
+        enableAllow : function () {
+            document.querySelector('#arrow-right').style.display = 'block';
         },
         checkCount : function () {
            return  this.data.countElement > 49 ? false : true;
@@ -110,7 +136,9 @@
             },2500)
         },
         setElement : function* () {
-            var count = management.data.countElement;
+            var templateId = 'svg_';
+            var count      = management.data.countElement;
+
             for (var i = 0; i < count; i++){
 
                 var g           = document.createElementNS("http://www.w3.org/2000/svg", 'g');
@@ -119,6 +147,10 @@
                 var x           = Math.cos(2 * Math.PI * i / count) * R + centerX;
                 var y           = Math.sin(2 * Math.PI * i / count) * R + centerY;
 
+//                var preID  =
+                g.children[0].id               = templateId + (i + 1);
+                console.dir(g.children);
+//                        .fill =  rgb(191, 0, 0);
                 g.children[0].cx.baseVal.value = x ;
                 g.children[0].cy.baseVal.value = y ;
                 g.children[0].rx.baseVal.value = '12';
@@ -132,6 +164,32 @@
                 yield i;
             }
             return true;
+        },
+        range : function (N) {
+                let box = [];
+                for (let i = 1; i <= N; i++) box.push(i);
+                return box;
+        },
+        linkGenerator : function () {
+            return this.process(this.range(this.data.countElement), 2);
+        },
+        process : function* (box_fighters, step) {
+
+            // Если у нас остался один воин мы возвращаем его номер
+            if(box_fighters.length == 1){
+                return box_fighters.shift();
+            }
+            // Если шаг превысил количество элементов в массиве
+            // то мы должны его переопределить для нового круга
+            if(step  > box_fighters.length){
+
+                step = step % box_fighters.length;
+            }
+
+            // "убиваем война" след по счету путем извлечения и сокращения массива на 1
+            yield box_fighters.splice(step - 1, 1);
+
+            yield* this.process(box_fighters,step + 1);
         }
     }
 </script>
