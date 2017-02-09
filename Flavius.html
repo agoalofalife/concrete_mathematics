@@ -7,12 +7,26 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.18.1/vis.min.js"></script>
 </head>
 <style>
-
+ #canvas{
+     position: absolute;
+     top: 10%;
+     left: 35%;
+ }
+ #input{
+     position: absolute;
+     top:45%;
+ }
+  #message{
+      position: absolute;
+      top: 60%;
+      left: 1%;
+      font-weight: 600;
+  }
 </style>
 <body>
 <div id="app">
 
-    <svg width="580" height="400" xmlns="http://www.w3.org/2000/svg">
+    <svg width="800" height="800" id="canvas" xmlns="http://www.w3.org/2000/svg">
         <g>
             <title>background</title>
             <rect fill="#fff" id="canvas_background" height="402" width="582" y="-1" x="-1"/>
@@ -22,60 +36,78 @@
         </g>
         <g class="body_svg">
             <title>Layer 1</title>
-            <ellipse ry="107" rx="107" id="svg_1" cy="200" cx="200" stroke-width="1.5" stroke="#000" fill="#fff"/>
+            <ellipse ry="200" rx="200" id="svg_1" cy="300" cx="300" stroke-width="1.5" stroke="#000" fill="#fff"/>
         </g>
     </svg>
 </div>
-<div class="form-group col-md-4" id="input">
+<div class="form-group col-md-3" id="input">
     <label>Введите количество войнов</label>
     <input type="text" class="form-control " id="InputName" placeholder="Например 10">
 </div>
+<p id="message"></p>
 <script>
-    var centerX        = 200;
-    var centerY        = 200;
-    var R              = 107;
+    var centerX        = 300;
+    var centerY        = 300;
+    var R              = 200;
 
     document.querySelector('#InputName').addEventListener('keypress', function (e) {
         if (e.which == 13 || e.keyCode == 13) {
 
             management.data.countElement = e.target.value;
-//            management.unebleInput();
 
-//            var generator = management.setElement();
-            // Добавить таймер для анимационного обавления элементов
-            console.log( management.setElement() );
+            if ( management.checkCount() ) {
+                // Добавить таймер для анимационного обнавления элементов
+                var generator  = management.setElement();
+                var IDInterval = setInterval(function () {
+                    if (generator.next().done === true){
+                        clearInterval(IDInterval);
+                    }
+                }, 120)
+            } else {
+                management.pushMessage();
+            }
+
         }
     });
 
+    function get_last_hero(box_fighters, step){
 
-//    for (var i = 0; i < count; i++){
-//        var g           = document.createElementNS("http://www.w3.org/2000/svg", 'g');
-//        g.innerHTML     = management.data.templateCircle;
-//
-//        var x           = Math.cos(2 * Math.PI * i / count) * R + centerX;
-//        var y           = Math.sin(2 * Math.PI * i / count) * R + centerY;
-//
-//        g.children[0].cx.baseVal.value = x ;
-//        g.children[0].cy.baseVal.value = y ;
-//        g.children[0].rx.baseVal.value = '22';
-//        g.children[0].ry.baseVal.value = '22';
-//
-//        g.children[1].innerHTML          = i + 1;
-//        g.children[1].x.baseVal[0].value = x - 10;
-//        g.children[1].y.baseVal[0].value = y + 6;
-//
-//        document.querySelector('.body_svg').appendChild(g);
-//    }
+        // Если у нас остался один воин мы возвращаем его номер
+        if(box_fighters.length == 1){
+            return box_fighters.shift();
+        }
+        // Если шаг превысил количество элементов в массиве
+        // то мы должны его переопределить для нового круга
+        if(step  > box_fighters.length){
 
+            step = step % box_fighters.length;
+        }
+
+        // "убиваем война" след по счету путем извлечения и сокращения массива на 1
+        box_fighters.splice(step - 1,1);
+
+        // след шаг
+        return get_last_hero(box_fighters,step + 1);
+    }
 
     var management = {
         data : {
           countElement   : '',
-          templateCircle :  `<ellipse stroke="#000" ry="20.000001" rx="21.5" id="svg_3" cy="160.000001" cx="177" stroke-width="1.5" fill="#fff"/>
-            <text xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="24" id="svg_4" y="169" x="169.5" fill-opacity="null" stroke-opacity="null" stroke-width="0" stroke="#000" fill="#000000">1</text>`,
+          templateCircle :  `<ellipse stroke="#000" ry="20" rx="20" id="svg_3" cy="160" cx="177" stroke-width="1.5" fill="#fff"/>
+            <text xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="20" id="svg_4" y="169" x="169.5" fill-opacity="null" stroke-opacity="null" stroke-width="0" stroke="#000" fill="#000000">1</text>`,
         },
         unebleInput : function () {
             document.querySelector('#input').style.display = 'none';
+        },
+        checkCount : function () {
+           return  this.data.countElement > 49 ? false : true;
+        },
+        pushMessage : function () {
+            var linkMessage         =    document.querySelector('#message');
+            linkMessage.innerHTML   = 'Да хватит хватит! 50 вполне достаточно';
+            setTimeout(function () {
+                linkMessage.innerHTML = '';
+            },2500)
         },
         setElement : function* () {
             var count = management.data.countElement;
@@ -89,8 +121,8 @@
 
                 g.children[0].cx.baseVal.value = x ;
                 g.children[0].cy.baseVal.value = y ;
-                g.children[0].rx.baseVal.value = '22';
-                g.children[0].ry.baseVal.value = '22';
+                g.children[0].rx.baseVal.value = '12';
+                g.children[0].ry.baseVal.value = '12';
 
                 g.children[1].innerHTML          = i + 1;
                 g.children[1].x.baseVal[0].value = x - 10;
