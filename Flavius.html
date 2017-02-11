@@ -60,48 +60,41 @@
     var centerY        = 300;
     var R              = 200;
 
-    document.querySelector('#arrow-right').addEventListener('click', function (e) {
+    document.querySelector('#arrow-right').addEventListener('click', function () {
 
-        var generatorResult = management.linkGeneratorProcess.next();
+        if (management.data.originalArray.length !== 1) {
 
-        if (generatorResult.done === false)
-        {
-            management.lastValueInProcess       = generatorResult.value;
-            document.querySelector('#svg_' + management.lastValueInProcess[0]).attributes.fill.value = '#f00';
+            var generatorResult = management.linkGeneratorProcess.next();
+
+            if (generatorResult.done === false)
+            {
+                management.lastElement              = management.data.originalArray;
+                management.lastValueInProcess       = generatorResult.value;
+
+                document.querySelector('#svg_' + management.lastValueInProcess[0]).attributes.fill.value = '#f00';
+            }
+
         } else {
-            console.log( management.lastValueInProcess );
-//            document.querySelector('#svg_' + generatorResult.value[0]);
+           var linkLastNode =  document.querySelector('#svg_' + management.data.originalArray[0]);
+
+                linkLastNode.nextElementSibling.attributes[3].value = 40;
+                linkLastNode.rx.baseVal.value                       = '50';
+                linkLastNode.ry.baseVal.value                       = '50';
         }
-
     });
-//    new Array(document.querySelectorAll('g')).filter(function(e){
-//        if(e.children){
-//            var point = e.children[0].attributes.fill;
-//            return point !== undefined;
-//            if(point !== undefined){
-//                console.log(point);
-//                return point.value == '#f00'
-//            }
-//        }
-////var point = e.children[0].attributes.fill;
-////if(point !== undefined){
-//        //point.value != '#f00'
-////}
-//    })
 
-    function seargRemaining() {
 
-    }
     document.querySelector('#InputName').addEventListener('keypress', function (e) {
         if (e.which == 13 || e.keyCode == 13) {
 
             management.data.countElement = e.target.value;
 
             if ( management.checkCount() ) {
-                // Добавить таймер для анимационного обнавления элементов
+
                 var generator  = management.setElement();
                 management.unubleInput();
                 management.enableAllow();
+
                 var IDInterval = setInterval(function () {
                     if (generator.next().done === true){
                         clearInterval(IDInterval);
@@ -116,30 +109,10 @@
     });
 
 
-
-
-
-    function*  get_last_hero(box_fighters, step){
-
-        // Если у нас остался один воин мы возвращаем его номер
-        if(box_fighters.length == 1){
-            return box_fighters.shift();
-        }
-        // Если шаг превысил количество элементов в массиве
-        // то мы должны его переопределить для нового круга
-        if(step  > box_fighters.length){
-
-            step = step % box_fighters.length;
-        }
-
-        // "убиваем война" след по счету путем извлечения и сокращения массива на 1
-        yield box_fighters.splice(step - 1, 1);
-
-        yield* get_last_hero(box_fighters,step + 1);
-    }
-
     var management = {
         data : {
+          originalArray        : '',
+          lastElement          : '',
           countElement         : '',
           linkGeneratorProcess : '',
           lastValueInProcess   : '',
@@ -174,12 +147,10 @@
                 var x           = Math.cos(2 * Math.PI * i / count) * R + centerX;
                 var y           = Math.sin(2 * Math.PI * i / count) * R + centerY;
 
-
                 g.children[0].id               = templateId + (i + 1);
 
-
-                g.children[0].cx.baseVal.value = x ;
-                g.children[0].cy.baseVal.value = y ;
+                g.children[0].cx.baseVal.value = x;
+                g.children[0].cy.baseVal.value = y;
                 g.children[0].rx.baseVal.value = '12';
                 g.children[0].ry.baseVal.value = '12';
 
@@ -195,30 +166,29 @@
         range : function (N) {
                 let box = [];
                 for (let i = 1; i <= N; i++) box.push(i);
+                this.data.originalArray = box;
                 return box;
-        },
-        linkGenerator : function () {
-            return this.process(this.range(this.data.countElement), 2);
-        },
-        process : function* (box_fighters, step) {
-
-            // Если у нас остался один воин мы возвращаем его номер
-            if(box_fighters.length == 1){
-                return box_fighters.shift();
-            }
-            // Если шаг превысил количество элементов в массиве
-            // то мы должны его переопределить для нового круга
-            if(step  > box_fighters.length){
-
-                step = step % box_fighters.length;
-            }
-
-            // "убиваем война" след по счету путем извлечения и сокращения массива на 1
-            yield box_fighters.splice(step - 1, 1);
-
-            yield* this.process(box_fighters,step + 1);
         }
     }
+
+
+
+    function*  get_last_hero(box_fighters, step){
+
+        if(box_fighters.length == 1){
+            return box_fighters.shift();
+        }
+
+        if(step  > box_fighters.length){
+
+            step = step % box_fighters.length;
+        }
+
+        yield box_fighters.splice(step - 1, 1);
+
+        yield* get_last_hero(box_fighters,step + 1);
+    }
+
 </script>
 </body>
 </html>
